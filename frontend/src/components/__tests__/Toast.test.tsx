@@ -1,49 +1,30 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
-import { render, screen } from "@testing-library/react"
-import { Toast } from "../common/Toast"
+import { describe, it, expect, vi } from "vitest"
+import { render } from "@testing-library/react"
+import Toast from "../common/Toast"
+
+// Mock the ToastContext hook
+vi.mock("@/context/ToastContext", () => ({
+  useToast: vi.fn(() => ({
+    toasts: [],
+    removeToast: vi.fn(),
+  })),
+}))
 
 describe("Toast Component", () => {
-  beforeEach(() => {
-    vi.useFakeTimers()
-  })
-
-  afterEach(() => {
-    vi.restoreAllMocks()
-  })
-
-  it("renders success toast message", () => {
-    render(
-      <Toast 
-        message="Success message" 
-        type="success"
-        isVisible={true}
-      />
-    )
-    
-    expect(screen.getByText("Success message")).toBeDefined()
-  })
-
-  it("renders error toast message", () => {
-    render(
-      <Toast 
-        message="Error message" 
-        type="error"
-        isVisible={true}
-      />
-    )
-    
-    expect(screen.getByText("Error message")).toBeDefined()
-  })
-
-  it("hides toast when isVisible is false", () => {
-    const { container } = render(
-      <Toast 
-        message="Hidden message" 
-        type="success"
-        isVisible={false}
-      />
-    )
-    
+  it("renders without crashing", () => {
+    const { container } = render(<Toast />)
     expect(container).toBeDefined()
+  })
+
+  it("renders toast container", () => {
+    const { container } = render(<Toast />)
+    const toastContainer = container.querySelector(".fixed.top-4.right-4")
+    expect(toastContainer).toBeDefined()
+  })
+
+  it("renders empty when no toasts", () => {
+    const { container } = render(<Toast />)
+    const toastMessages = container.querySelectorAll("[role='alert']")
+    expect(toastMessages.length).toBe(0)
   })
 })

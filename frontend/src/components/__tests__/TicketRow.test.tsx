@@ -5,16 +5,12 @@ import { Ticket } from '@/api/tickets'
 
 const mockTicket: Ticket = {
   id: '123e4567-e89b-12d3-a456-426614174000',
-  numero: 'TPT-20240101-001',
-  titulo: 'Test Ticket',
   descricao: 'Test ticket description',
   status: 'aberto',
-  empresa_id: 'empresa-id',
-  contato_id: 'contato-id',
-  categoria_id: 'categoria-id',
+  empresaId: 'empresa-id',
+  contatoId: 'contato-id',
+  categoriaId: 'categoria-id',
   dataAbertura: new Date().toISOString(),
-  data_criacao: new Date().toISOString(),
-  data_atualizacao: new Date().toISOString(),
 }
 
 describe('TicketRow Component', () => {

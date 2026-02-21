@@ -1,12 +1,12 @@
 import { describe, it, expect, vi } from 'vitest'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, fireEvent } from '@testing-library/react'
 import { ActionMenu } from '../dashboard/ActionMenu'
 
 describe('ActionMenu Component', () => {
   const mockItems = [
     { label: 'View', onClick: vi.fn(), icon: '👁️' },
     { label: 'Edit', onClick: vi.fn(), icon: '✏️' },
-    { label: 'Delete', onClick: vi.fn(), icon: '🗑️', color: 'danger' },
+    { label: 'Delete', onClick: vi.fn(), icon: '🗑️', color: 'danger' as const },
   ]
 
   it('renders menu button', () => {
@@ -48,12 +48,13 @@ describe('ActionMenu Component', () => {
     expect(container).toBeDefined()
   })
 
-  it('renders with custom className', () => {
+  it('renders with onOpen callback', () => {
+    const onOpen = vi.fn()
     const { container } = render(
-      <ActionMenu items={mockItems} className="custom-class" />
+      <ActionMenu items={mockItems} onOpen={onOpen} />
     )
-    
-    // Should apply custom styling
+
+    // Should render without errors
     expect(container).toBeDefined()
   })
 })
