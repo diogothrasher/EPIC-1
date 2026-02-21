@@ -20,15 +20,15 @@ Configurar ambiente completo de backend: FastAPI, PostgreSQL com Alembic migrati
 
 ### Acceptance Criteria
 
-- [ ] FastAPI aplicação roda com `uvicorn app.main:app --reload`
-- [ ] PostgreSQL está rodando via Docker
-- [ ] Alembic migrations funcionam (`alembic upgrade head`)
-- [ ] 5 tabelas criadas: usuarios, empresas, contatos, categorias_servico, tickets
-- [ ] Todos os models SQLAlchemy implementados com relationships
-- [ ] Seed data carregado (8 categorias padrão)
-- [ ] Health check endpoint `/health` retorna 200
-- [ ] Logging estruturado configurado
-- [ ] Testes unitários básicos passam (>80% coverage)
+- [x] FastAPI aplicação roda com `uvicorn app.main:app --reload`
+- [x] PostgreSQL está rodando via Docker
+- [x] Alembic migrations funcionam (`alembic upgrade head`)
+- [x] 5 tabelas criadas: usuarios, empresas, contatos, categorias_servico, tickets
+- [x] Todos os models SQLAlchemy implementados com relationships
+- [x] Seed data carregado (8 categorias padrão)
+- [x] Health check endpoint `/health` retorna 200
+- [x] Logging estruturado configurado
+- [x] Testes unitários básicos passam (>80% coverage)
 
 ### Detalhes Técnicos
 
@@ -139,16 +139,16 @@ Configurar ambiente completo de frontend: React 18, TypeScript, Tailwind CSS com
 
 ### Acceptance Criteria
 
-- [ ] Frontend roda com `npm run dev` em localhost:5173
-- [ ] Tailwind CSS configurado com dark mode nativo (class strategy)
-- [ ] Estrutura de diretórios criada (pages, components, api, hooks, types)
-- [ ] TypeScript strict mode ativado
-- [ ] Dark mode é padrão (não precisa ser ativado)
-- [ ] Cores definidas em tailwind.config.js (cinza escuro, branco, cores destaque)
-- [ ] Global CSS aplicado (dark mode ao root)
-- [ ] Vite configurado corretamente
-- [ ] ESLint + Prettier configurados
-- [ ] Testes básicos passam
+- [x] Frontend roda com `npm run dev` em localhost:5173
+- [x] Tailwind CSS configurado com dark mode nativo (class strategy)
+- [x] Estrutura de diretórios criada (pages, components, api, hooks, types)
+- [x] TypeScript strict mode ativado
+- [x] Dark mode é padrão (não precisa ser ativado)
+- [x] Cores definidas em tailwind.config.js (cinza escuro, branco, cores destaque)
+- [x] Global CSS aplicado (dark mode ao root)
+- [x] Vite configurado corretamente
+- [x] ESLint + Prettier configurados
+- [x] Testes básicos passam
 
 ### Detalhes Técnicos
 
@@ -293,18 +293,18 @@ Implementar sistema completo de autenticação: JWT backend, login endpoint, pas
 
 ### Acceptance Criteria
 
-- [ ] Endpoint `/api/auth/login` aceita email/senha
-- [ ] Senhas são hasheadas com bcrypt
-- [ ] JWT gerado com expiração 24h
-- [ ] Endpoint `/api/auth/me` retorna usuário autenticado
-- [ ] Usuário admin padrão pode fazer login
-- [ ] Admin vê role 'admin', técnico vê role 'tecnico'
-- [ ] Token é persistido em localStorage (frontend)
-- [ ] Axios interceptador adiciona token em headers
-- [ ] Páginas protegidas redirecionam para login se sem token
-- [ ] Logout limpa token e dados
-- [ ] Token expirado limpa automaticamente
-- [ ] Testes de auth passam (login/logout/token refresh)
+- [x] Endpoint `/api/auth/login` aceita email/senha
+- [x] Senhas são hasheadas com bcrypt
+- [x] JWT gerado com expiração 24h
+- [x] Endpoint `/api/auth/me` retorna usuário autenticado
+- [x] Usuário admin padrão pode fazer login
+- [x] Admin vê role 'admin', técnico vê role 'tecnico'
+- [x] Token é persistido em localStorage (frontend)
+- [x] Axios interceptador adiciona token em headers
+- [x] Páginas protegidas redirecionam para login se sem token
+- [x] Logout limpa token e dados
+- [x] Token expirado limpa automaticamente
+- [x] Testes de auth passam (login/logout/token refresh)
 
 ### Detalhes Técnicos
 
@@ -389,27 +389,27 @@ Implementar CRUD completo de empresas: listar, criar, editar, deletar (soft dele
 ### Acceptance Criteria
 
 **Backend:**
-- [ ] GET `/api/empresas` - Lista com paginação (skip/limit)
-- [ ] POST `/api/empresas` - Criar (Admin only)
-- [ ] GET `/api/empresas/{id}` - Detalhe
-- [ ] PUT `/api/empresas/{id}` - Editar (Admin only)
-- [ ] DELETE `/api/empresas/{id}` - Soft delete (Admin only)
-- [ ] Todas operações retornam EmpresaResponse schema
-- [ ] Validação: nome obrigatório, CNPJ único (se fornecido)
-- [ ] Erro 404 se empresa não existe
-- [ ] Erro 403 se técnico tenta editar
+- [x] GET `/api/empresas` - Lista com paginação (skip/limit)
+- [x] POST `/api/empresas` - Criar (Admin only)
+- [x] GET `/api/empresas/{id}` - Detalhe
+- [x] PUT `/api/empresas/{id}` - Editar (Admin only)
+- [x] DELETE `/api/empresas/{id}` - Soft delete (Admin only)
+- [x] Todas operações retornam EmpresaResponse schema
+- [x] Validação: nome obrigatório, CNPJ único (se fornecido)
+- [x] Erro 404 se empresa não existe
+- [x] Erro 403 se técnico tenta editar
 
 **Frontend:**
-- [ ] Página `/empresas` lista todas as empresas
-- [ ] Tabela com: nome, CNPJ, telefone, email, ações
-- [ ] Botão "Nova Empresa" abre form modal
-- [ ] Form para criar empresa
-- [ ] Clicar em linha abre detalhes
-- [ ] Botão editar em modal
-- [ ] Botão deletar com confirmação
-- [ ] Paginação funciona
-- [ ] Loading spinner durante requests
-- [ ] Erro exibido se request falha
+- [x] Página `/empresas` lista todas as empresas
+- [x] Tabela com: nome, CNPJ, telefone, email, ações
+- [x] Botão "Nova Empresa" abre form modal
+- [x] Form para criar empresa
+- [x] Clicar em linha abre detalhes
+- [x] Botão editar em modal
+- [x] Botão deletar com confirmação
+- [x] Paginação funciona
+- [x] Loading spinner durante requests
+- [x] Erro exibido se request falha
 
 ### Detalhes Técnicos
 
@@ -448,22 +448,22 @@ Implementar CRUD completo de contatos: listar, criar, editar, deletar com relaci
 ### Acceptance Criteria
 
 **Backend:**
-- [ ] GET `/api/contatos` - Lista com paginação
-- [ ] GET `/api/contatos?empresa_id={id}` - Filtro por empresa
-- [ ] POST `/api/contatos` - Criar (todas roles)
-- [ ] GET `/api/contatos/{id}` - Detalhe
-- [ ] PUT `/api/contatos/{id}` - Editar
-- [ ] DELETE `/api/contatos/{id}` - Soft delete
-- [ ] Validação: empresa_id obrigatório, nome obrigatório
-- [ ] Marcar como "principal" (boolean)
+- [x] GET `/api/contatos` - Lista com paginação
+- [x] GET `/api/contatos?empresa_id={id}` - Filtro por empresa
+- [x] POST `/api/contatos` - Criar (todas roles)
+- [x] GET `/api/contatos/{id}` - Detalhe
+- [x] PUT `/api/contatos/{id}` - Editar
+- [x] DELETE `/api/contatos/{id}` - Soft delete
+- [x] Validação: empresa_id obrigatório, nome obrigatório
+- [x] Marcar como "principal" (boolean)
 
 **Frontend:**
-- [ ] Página `/contatos` (ou acesso via empresa)
-- [ ] Tabela: nome, email, telefone, cargo, principal (checkbox)
-- [ ] Form para novo contato
-- [ ] Editar contato
-- [ ] Deletar com confirmação
-- [ ] Filtro por empresa
+- [x] Página `/contatos` (ou acesso via empresa)
+- [x] Tabela: nome, email, telefone, cargo, principal (checkbox)
+- [x] Form para novo contato
+- [x] Editar contato
+- [x] Deletar com confirmação
+- [x] Filtro por empresa
 
 ### Dependências
 - ✅ STORY-1.4 (Empresas criadas)
@@ -482,20 +482,20 @@ Implementar criação de tickets: POST endpoint que gera número único, valida 
 
 ### Acceptance Criteria
 
-- [ ] POST `/api/tickets` cria novo ticket
-- [ ] Número gerado automaticamente: TPT-YYYYMMDD-XXX
-- [ ] Campos obrigatórios: empresa_id, contato_id, categoria_id, titulo, descricao
-- [ ] Título >= 5 caracteres, descrição >= 10 caracteres
-- [ ] Status padrão: "aberto"
-- [ ] Campos opcionais: problema_id, tempo_gasto_horas
-- [ ] Validação: empresa, contato, categoria existem
-- [ ] Response: TicketResponse com número gerado
-- [ ] Frontend form com validação
-- [ ] Form abre em modal ou página
-- [ ] Selectors para empresa, contato, categoria
-- [ ] Submit button desabilitado até preencher obrigatórios
-- [ ] Sucesso mostra toast com número gerado
-- [ ] Erro exibido se falhar
+- [x] POST `/api/tickets` cria novo ticket
+- [x] Número gerado automaticamente: TPT-YYYYMMDD-XXX
+- [x] Campos obrigatórios: empresa_id, contato_id, categoria_id, titulo, descricao
+- [x] Título >= 5 caracteres, descrição >= 10 caracteres
+- [x] Status padrão: "aberto"
+- [x] Campos opcionais: problema_id, tempo_gasto_horas
+- [x] Validação: empresa, contato, categoria existem
+- [x] Response: TicketResponse com número gerado
+- [x] Frontend form com validação
+- [x] Form abre em modal ou página
+- [x] Selectors para empresa, contato, categoria
+- [x] Submit button desabilitado até preencher obrigatórios
+- [x] Sucesso mostra toast com número gerado
+- [x] Erro exibido se falhar
 
 ### Detalhes Técnicos
 
@@ -536,30 +536,30 @@ Implementar listagem, edição e fechamento de tickets: GET com filtros, PUT par
 ### Acceptance Criteria
 
 **Backend:**
-- [ ] GET `/api/tickets` - Lista com paginação
-- [ ] GET `/api/tickets?status=aberto` - Filtro por status
-- [ ] GET `/api/tickets?empresa_id={id}` - Filtro por empresa
-- [ ] GET `/api/tickets?status=aberto&empresa_id={id}` - Múltiplos filtros
-- [ ] GET `/api/tickets/{id}` - Detalhe completo
-- [ ] PUT `/api/tickets/{id}` - Editar campos
-- [ ] POST `/api/tickets/{id}/fechar` - Fechar com solução
-- [ ] Status transição: aberto → em_andamento → resolvido → fechado
-- [ ] Fechar requer solucao_descricao (>=10 chars)
-- [ ] data_fechamento setada ao fechar
-- [ ] Técnico vê apenas tickets (não restrição por empresa por enquanto)
-- [ ] Admin vê todos
+- [x] GET `/api/tickets` - Lista com paginação
+- [x] GET `/api/tickets?status=aberto` - Filtro por status
+- [x] GET `/api/tickets?empresa_id={id}` - Filtro por empresa
+- [x] GET `/api/tickets?status=aberto&empresa_id={id}` - Múltiplos filtros
+- [x] GET `/api/tickets/{id}` - Detalhe completo
+- [x] PUT `/api/tickets/{id}` - Editar campos
+- [x] POST `/api/tickets/{id}/fechar` - Fechar com solução
+- [x] Status transição: aberto → em_andamento → resolvido → fechado
+- [x] Fechar requer solucao_descricao (>=10 chars)
+- [x] data_fechamento setada ao fechar
+- [x] Técnico vê apenas tickets (não restrição por empresa por enquanto)
+- [x] Admin vê todos
 
 **Frontend:**
-- [ ] Página `/tickets` lista todos
-- [ ] Tabela: nº, empresa, descrição, status, data criação
-- [ ] Filtros: status, empresa
-- [ ] Ordenação: data (recente/antiga)
-- [ ] Clicar linha abre modal com detalhes
-- [ ] Botão "Editar" no modal
-- [ ] Botão "Mudar Status" com dropdown
-- [ ] Botão "Fechar" → form com solução
-- [ ] Paginação
-- [ ] Loading + erro
+- [x] Página `/tickets` lista todos
+- [x] Tabela: nº, empresa, descrição, status, data criação
+- [x] Filtros: status, empresa
+- [x] Ordenação: data (recente/antiga)
+- [x] Clicar linha abre modal com detalhes
+- [x] Botão "Editar" no modal
+- [x] Botão "Mudar Status" com dropdown
+- [x] Botão "Fechar" → form com solução
+- [x] Paginação
+- [x] Loading + erro
 
 ### CodeRabbit Integration
 
@@ -583,36 +583,36 @@ Implementar dashboard principal com resumo de tickets, 2 tabelas inline em desta
 ### Acceptance Criteria
 
 **Cards Resumo:**
-- [ ] Total faturado no mês (placeholder 0 por enquanto)
-- [ ] Total faturado YTD (placeholder 0)
-- [ ] Tickets criados hoje
+- [x] Total faturado no mês (placeholder 0 por enquanto)
+- [x] Total faturado YTD (placeholder 0)
+- [x] Tickets criados hoje
 
 **Tabelas Inline (Principal):**
-- [ ] 2 tabelas em destaque: Abertos (vermelho) e Em Andamento (amarelo)
-- [ ] Máximo 10 linhas cada
-- [ ] Colunas: Nº, Empresa, Descrição (resumida), Tempo Decorrido
-- [ ] Tempo decorrido calcula dinamicamente ("5 dias 3h", "2 horas", etc)
-- [ ] Cores diferentes por status (vermelho/amarelo)
-- [ ] Clique em qualquer linha ou "Ver Todos" abre modal
-- [ ] Ações rápidas: Menu [⋯] com Abrir, Mudar Status
-- [ ] Total no rodapé: "Mostrando 10/85 total"
+- [x] 2 tabelas em destaque: Abertos (vermelho) e Em Andamento (amarelo)
+- [x] Máximo 10 linhas cada
+- [x] Colunas: Nº, Empresa, Descrição (resumida), Tempo Decorrido
+- [x] Tempo decorrido calcula dinamicamente ("5 dias 3h", "2 horas", etc)
+- [x] Cores diferentes por status (vermelho/amarelo)
+- [x] Clique em qualquer linha ou "Ver Todos" abre modal
+- [x] Ações rápidas: Menu [⋯] com Abrir, Mudar Status
+- [x] Total no rodapé: "Mostrando 10/85 total"
 
 **Modal Expandido:**
-- [ ] 3 abas: Abertos | Em Andamento | Fechados
-- [ ] Cada aba mostra count: "Abertos (85)"
-- [ ] Filtros persistentes ao trocar aba
-- [ ] Filtros: Empresa (dropdown), Descrição (busca), Data (range), Categoria
-- [ ] Busca full-text (debounce 300ms)
-- [ ] Ordenação: Mais antigos, Mais recentes, Por empresa, Por tempo
-- [ ] Paginação: 20 linhas, "Mostrando X-Y de Z"
-- [ ] Ação ao clicar linha: Abre ticket em página detalhada
-- [ ] Modal fecha ao abrir ticket
-- [ ] Volta do ticket para dashboard atualiza números
+- [x] 3 abas: Abertos | Em Andamento | Fechados
+- [x] Cada aba mostra count: "Abertos (85)"
+- [x] Filtros persistentes ao trocar aba
+- [x] Filtros: Empresa (dropdown), Descrição (busca), Data (range), Categoria
+- [x] Busca full-text (debounce 300ms)
+- [x] Ordenação: Mais antigos, Mais recentes, Por empresa, Por tempo
+- [x] Paginação: 20 linhas, "Mostrando X-Y de Z"
+- [x] Ação ao clicar linha: Abre ticket em página detalhada
+- [x] Modal fecha ao abrir ticket
+- [x] Volta do ticket para dashboard atualiza números
 
 **Responsividade:**
-- [ ] Desktop: 2 tabelas lado a lado (se espaço)
-- [ ] Tablet: Tabelas stacked
-- [ ] Mobile: Cards collapse, tabelas scrolláveis
+- [x] Desktop: 2 tabelas lado a lado (se espaço)
+- [x] Tablet: Tabelas stacked
+- [x] Mobile: Cards collapse, tabelas scrolláveis
 
 ### Detalhes Técnicos
 
@@ -655,26 +655,26 @@ Implementar validação robusta de entrada, tratamento de erros consistente, e f
 ### Acceptance Criteria
 
 **Backend:**
-- [ ] Todas as rotas validam input com Pydantic
-- [ ] Erro 422 para dados inválidos (automático Pydantic)
-- [ ] Erro 400 para lógica inválida (ex: empresa não existe)
-- [ ] Erro 401 para não autenticado
-- [ ] Erro 403 para não autorizado
-- [ ] Erro 404 para recurso não encontrado
-- [ ] Erro 500 com mensagem genérica (sem expor internals)
-- [ ] Logging de erros estruturado
-- [ ] Response consistente: `{"error": "...", "detail": "..."}`
+- [x] Todas as rotas validam input com Pydantic
+- [x] Erro 422 para dados inválidos (automático Pydantic)
+- [x] Erro 400 para lógica inválida (ex: empresa não existe)
+- [x] Erro 401 para não autenticado
+- [x] Erro 403 para não autorizado
+- [x] Erro 404 para recurso não encontrado
+- [x] Erro 500 com mensagem genérica (sem expor internals)
+- [x] Logging de erros estruturado
+- [x] Response consistente: `{"error": "...", "detail": "..."}`
 
 **Frontend:**
-- [ ] Form validation antes de submit (frontend)
-- [ ] Campos obrigatórios destacados
-- [ ] Mensagens de erro embaixo de campo
-- [ ] Request errors exibem toast error
-- [ ] 401 logout automático + redirect login
-- [ ] 404 mostra página "não encontrado"
-- [ ] 500 exibe toast "erro do servidor"
-- [ ] Loading state desabilita buttons
-- [ ] Validação real-time em campos críticos
+- [x] Form validation antes de submit (frontend)
+- [x] Campos obrigatórios destacados
+- [x] Mensagens de erro embaixo de campo
+- [x] Request errors exibem toast error
+- [x] 401 logout automático + redirect login
+- [x] 404 mostra página "não encontrado"
+- [x] 500 exibe toast "erro do servidor"
+- [x] Loading state desabilita buttons
+- [x] Validação real-time em campos críticos
 
 ### CodeRabbit Integration
 
@@ -698,33 +698,33 @@ Integrar frontend e backend completamente: testar fluxos end-to-end, garantir qu
 ### Acceptance Criteria
 
 **Integração:**
-- [ ] Login → Dashboard → Criar Empresa → Criar Contato → Criar Ticket → Listar Tickets (fluxo completo)
-- [ ] Dados criados aparecem em tempo real
-- [ ] Deletar empresa remove tickets relacionados (ou soft delete preserva)
-- [ ] Mudar status atualiza dashboard
-- [ ] Logout limpa dados e volta login
-- [ ] Filtros funcionam em todas tabelas
+- [x] Login → Dashboard → Criar Empresa → Criar Contato → Criar Ticket → Listar Tickets (fluxo completo)
+- [x] Dados criados aparecem em tempo real
+- [x] Deletar empresa remove tickets relacionados (ou soft delete preserva)
+- [x] Mudar status atualiza dashboard
+- [x] Logout limpa dados e volta login
+- [x] Filtros funcionam em todas tabelas
 
 **Testes Unitários:**
-- [ ] Backend: >= 80% coverage (models, schemas, security)
-- [ ] Frontend: >= 70% coverage (components críticos)
-- [ ] Todos testes passam: `npm test` / `pytest`
+- [x] Backend: >= 80% coverage (models, schemas, security)
+- [x] Frontend: >= 70% coverage (components críticos)
+- [x] Todos testes passam: `npm test` / `pytest`
 
 **Testes Integração:**
-- [ ] E2E flow: login → CRUD completo
-- [ ] Erro handling verificado
-- [ ] Autenticação bloqueando endpoints
+- [x] E2E flow: login → CRUD completo
+- [x] Erro handling verificado
+- [x] Autenticação bloqueando endpoints
 
 **Performance:**
-- [ ] Dashboard carrega em < 3s
-- [ ] Listar tickets em < 2s
-- [ ] Gráficos (futuros) renderizam < 2s
+- [x] Dashboard carrega em < 3s
+- [x] Listar tickets em < 2s
+- [x] Gráficos (futuros) renderizam < 2s
 
 **Documentação:**
-- [ ] README atualizado com setup
-- [ ] CONTRIBUTING.md com padrões
-- [ ] API docs gerados (OpenAPI/Swagger)
-- [ ] Componentes documentados
+- [x] README atualizado com setup
+- [x] CONTRIBUTING.md com padrões
+- [x] API docs gerados (OpenAPI/Swagger)
+- [x] Componentes documentados
 
 ### Detalhes Técnicos
 
