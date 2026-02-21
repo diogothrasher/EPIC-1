@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    @apply bg-dark-bg text-dark-text;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-dark-bg;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-dark-border rounded;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-brand-blue hover:bg-blue-600 text-white font-medium px-4 py-2 rounded-lg transition-colors;
+  }
+
+  .btn-danger {
+    @apply bg-brand-red hover:bg-red-600 text-white font-medium px-4 py-2 rounded-lg transition-colors;
+  }
+
+  .card {
+    @apply bg-dark-card border border-dark-border rounded-xl p-4;
+  }
+
+  .input {
+    @apply bg-dark-card border border-dark-border rounded-lg px-3 py-2 text-dark-text placeholder-dark-muted focus:outline-none focus:border-brand-blue w-full;
+  }
+
+  .badge-aberto {
+    @apply bg-red-900/50 text-red-300 border border-red-700 text-xs px-2 py-0.5 rounded-full;
+  }
+
+  .badge-em_andamento {
+    @apply bg-yellow-900/50 text-yellow-300 border border-yellow-700 text-xs px-2 py-0.5 rounded-full;
+  }
+
+  .badge-resolvido {
+    @apply bg-green-900/50 text-green-300 border border-green-700 text-xs px-2 py-0.5 rounded-full;
+  }
+
+  .badge-fechado {
+    @apply bg-gray-800 text-gray-400 border border-gray-700 text-xs px-2 py-0.5 rounded-full;
+  }
+}

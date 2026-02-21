@@ -1,0 +1,11 @@
+export { empresasApi } from './empresas'
+export { contatosApi } from './contatos'
+export { ticketsApi } from './tickets'
+export { categoriasApi } from './categorias'
+export { dashboardApi } from './dashboard'
+
+export type { Empresa } from './empresas'
+export type { Contato } from './contatos'
+export type { Ticket } from './tickets'
+export type { Categoria } from './categorias'
+export type { DashboardStats, DashboardData } from './dashboard'
