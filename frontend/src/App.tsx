@@ -1,6 +1,8 @@
 import React, { Suspense } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { AuthProvider } from '@/context/AuthContext'
+import { ToastProvider } from '@/context/ToastContext'
+import Toast from '@/components/common/Toast'
 import ProtectedRoute from '@/components/common/ProtectedRoute'
 import Sidebar from '@/components/common/Sidebar'
 import LoginPage from '@/pages/LoginPage'
@@ -27,30 +29,33 @@ const Spinner: React.FC = () => (
 
 const App: React.FC = () => (
   <AuthProvider>
-    <BrowserRouter>
-      <Suspense fallback={<Spinner />}>
-        <Routes>
-          <Route path="/login" element={<LoginPage />} />
-          <Route
-            path="/*"
-            element={
-              <ProtectedRoute>
-                <Layout>
-                  <Routes>
-                    <Route path="/" element={<DashboardPage />} />
-                    <Route path="/empresas" element={<EmpresasPage />} />
-                    <Route path="/contatos" element={<ContatosPage />} />
-                    <Route path="/tickets" element={<TicketsPage />} />
-                    <Route path="/tickets/:id" element={<TicketDetailPage />} />
-                    <Route path="*" element={<NotFoundPage />} />
-                  </Routes>
-                </Layout>
-              </ProtectedRoute>
-            }
-          />
-        </Routes>
-      </Suspense>
-    </BrowserRouter>
+    <ToastProvider>
+      <BrowserRouter>
+        <Suspense fallback={<Spinner />}>
+          <Toast />
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route
+              path="/*"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <Routes>
+                      <Route path="/" element={<DashboardPage />} />
+                      <Route path="/empresas" element={<EmpresasPage />} />
+                      <Route path="/contatos" element={<ContatosPage />} />
+                      <Route path="/tickets" element={<TicketsPage />} />
+                      <Route path="/tickets/:id" element={<TicketDetailPage />} />
+                      <Route path="*" element={<NotFoundPage />} />
+                    </Routes>
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </Suspense>
+      </BrowserRouter>
+    </ToastProvider>
   </AuthProvider>
 )
 

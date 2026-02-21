@@ -3,9 +3,10 @@ import { api } from './client'
 export interface Empresa {
   id: string
   nome: string
-  cnpj: string
+  cnpj?: string
   email?: string
   telefone?: string
+  endereco?: string
   status?: string
   createdAt?: string
   updatedAt?: string
@@ -22,7 +23,7 @@ export const empresasApi = {
     return data
   },
 
-  create: async (empresa: Omit<Empresa, 'id' | 'createdAt' | 'updatedAt'>) => {
+  create: async (empresa: Omit<Empresa, 'id' | 'createdAt' | 'updatedAt' | 'status'>) => {
     const { data } = await api.post<Empresa>('/empresas', empresa)
     return data
   },
