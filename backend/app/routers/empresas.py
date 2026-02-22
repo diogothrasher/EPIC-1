@@ -16,7 +16,7 @@ router = APIRouter(prefix="/api/empresas", tags=["empresas"])
 @router.get("", response_model=List[EmpresaResponse])
 def listar(
     skip: int = Query(0, ge=0),
-    limit: int = Query(20, ge=1, le=100),
+    limit: int = Query(20, ge=1, le=500),
     db: Session = Depends(get_db),
     _: Usuario = Depends(get_current_user),
 ):

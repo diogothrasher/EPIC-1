@@ -37,7 +37,7 @@ def listar(
     status: Optional[str] = None,
     empresa_id: Optional[UUID] = None,
     skip: int = Query(0, ge=0),
-    limit: int = Query(20, ge=1, le=100),
+    limit: int = Query(20, ge=1, le=500),
     db: Session = Depends(get_db),
     _: Usuario = Depends(get_current_user),
 ):
@@ -144,3 +144,16 @@ def mudar_status(
     db.commit()
     db.refresh(ticket)
     return ticket
+
+
+@router.delete("/{ticket_id}", status_code=204)
+def deletar(
+    ticket_id: UUID,
+    db: Session = Depends(get_db),
+    _: Usuario = Depends(get_current_user),
+):
+    ticket = db.query(Ticket).filter(Ticket.id == ticket_id, Ticket.ativo == True).first()
+    if not ticket:
+        raise HTTPException(status_code=404, detail="Ticket não encontrado")
+    ticket.ativo = False
+    db.commit()
