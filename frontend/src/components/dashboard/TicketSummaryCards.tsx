@@ -1,4 +1,5 @@
 import React from 'react'
+import { CircleDollarSign, LineChart, Ticket } from 'lucide-react'
 
 interface TicketSummaryCardsProps {
   faturadoMes: number
@@ -25,19 +26,19 @@ export const TicketSummaryCards: React.FC<TicketSummaryCardsProps> = ({
       title: 'Faturado (Mês)',
       value: formatCurrency(faturadoMes),
       bgColor: 'bg-dark-card',
-      icon: '💰',
+      icon: CircleDollarSign,
     },
     {
       title: 'Faturado (YTD)',
       value: formatCurrency(faturadoYTD),
       bgColor: 'bg-dark-card',
-      icon: '📊',
+      icon: LineChart,
     },
     {
       title: 'Tickets Hoje',
       value: ticketsHoje.toString(),
       bgColor: 'bg-dark-card',
-      icon: '🎫',
+      icon: Ticket,
     },
   ]
 
@@ -54,16 +55,13 @@ export const TicketSummaryCards: React.FC<TicketSummaryCardsProps> = ({
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
       {cards.map((card, idx) => (
-        <div
-          key={idx}
-          className={`${card.bgColor} p-6 rounded-lg border border-dark-border hover:border-brand-blue/50 transition-colors`}
-        >
+        <div key={idx} className={`${card.bgColor} p-6 rounded-lg border border-dark-border hover:border-white/20 transition-colors`}>
           <div className="flex items-center justify-between">
             <div>
               <p className="text-dark-muted text-sm font-medium">{card.title}</p>
               <p className="text-white text-2xl font-bold mt-2">{card.value}</p>
             </div>
-            <span className="text-3xl">{card.icon}</span>
+            <card.icon className="w-7 h-7 text-brand-blue" />
           </div>
         </div>
       ))}

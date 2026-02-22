@@ -2,6 +2,11 @@ import logging
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from app.config import settings
+from app.database import engine, SessionLocal
+from app.models import Base
+from app.models.usuario import Usuario
+from app.security import hash_password
 from app.routers.health import router as health_router
 from app.routers.auth import router as auth_router
 from app.routers.empresas import router as empresas_router
@@ -9,6 +14,7 @@ from app.routers.contatos import router as contatos_router
 from app.routers.categorias import router as categorias_router
 from app.routers.tickets import router as tickets_router
 from app.routers.dashboard import router as dashboard_router
+from app.routers.faturamento import router as faturamento_router
 
 logging.basicConfig(
     level=logging.INFO,
@@ -30,6 +36,28 @@ app.add_middleware(
 )
 
 
+@app.on_event("startup")
+def ensure_tables():
+    if settings.environment in {"development", "testing"}:
+        Base.metadata.create_all(bind=engine)
+        db = SessionLocal()
+        try:
+            admin = db.query(Usuario).filter(Usuario.email == settings.admin_email).first()
+            if not admin:
+                db.add(
+                    Usuario(
+                        email=settings.admin_email,
+                        senha_hash=hash_password(settings.admin_password),
+                        nome="Administrador",
+                        role="admin",
+                        ativo=True,
+                    )
+                )
+                db.commit()
+        finally:
+            db.close()
+
+
 @app.exception_handler(Exception)
 async def generic_exception_handler(request: Request, exc: Exception):
     logging.error(f"Unhandled error: {exc}", exc_info=True)
@@ -43,3 +71,4 @@ app.include_router(contatos_router)
 app.include_router(categorias_router)
 app.include_router(tickets_router)
 app.include_router(dashboard_router)
+app.include_router(faturamento_router)

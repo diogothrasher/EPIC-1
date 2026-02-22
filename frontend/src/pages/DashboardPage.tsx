@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { dashboardApi } from '@/api/dashboard'
 import { ticketsApi, Ticket } from '@/api/tickets'
-import { empresasApi } from '@/api/empresas'
+import { empresasApi, Empresa } from '@/api/empresas'
+import { useBreakpoint } from '@/hooks/useBreakpoint'
+import { useConfirm } from '@/context/ConfirmContext'
 import TicketSummaryCards from '@/components/dashboard/TicketSummaryCards'
 import TabsSelector, { TabType } from '@/components/dashboard/TabsSelector'
 import TicketTableInline from '@/components/dashboard/TicketTableInline'
@@ -10,6 +12,8 @@ import TicketModalExpanded from '@/components/dashboard/TicketModalExpanded'
 
 const DashboardPage: React.FC = () => {
   const navigate = useNavigate()
+  const { isMobile } = useBreakpoint()
+  const { showConfirm } = useConfirm()
   const [stats, setStats] = useState({
     faturadoMes: 0,
     faturadoYTD: 0,
@@ -48,7 +52,7 @@ const DashboardPage: React.FC = () => {
 
       // Build empresas map
       const empMap = empresasData.reduce(
-        (acc: Record<string, string>, emp: any) => {
+        (acc: Record<string, string>, emp: Empresa) => {
           acc[emp.id] = emp.nome
           return acc
         },
@@ -97,7 +101,7 @@ const DashboardPage: React.FC = () => {
     }
   }
 
-  const handleSaveTicket = async (updatedTicket: any) => {
+  const handleSaveTicket = async (updatedTicket: Partial<Ticket>) => {
     if (!selectedTicket) return
 
     try {
@@ -110,7 +114,15 @@ const DashboardPage: React.FC = () => {
   }
 
   const handleDeleteTicket = async (id: string) => {
-    if (!window.confirm('Tem certeza que deseja deletar este ticket?')) return
+    const confirmed = await showConfirm({
+      title: 'Deletar Ticket',
+      message: 'Tem certeza que deseja deletar este ticket? Esta ação não pode ser desfeita.',
+      confirmText: 'Deletar',
+      cancelText: 'Cancelar',
+      isDangerous: true,
+    })
+
+    if (!confirmed) return
 
     try {
       await ticketsApi.delete(id)
@@ -126,14 +138,12 @@ const DashboardPage: React.FC = () => {
     fechados: stats.ticketsFechados,
   }
 
-  const isMobile = window.innerWidth < 768
-
   return (
     <div className="p-4 sm:p-6">
       <h1 className="text-2xl sm:text-3xl font-bold text-white mb-6">Dashboard</h1>
 
       {error && (
-        <div className="mb-4 p-4 bg-red-900/20 text-red-400 rounded-lg border border-red-900">
+        <div role="alert" aria-live="assertive" className="mb-4 p-4 bg-red-900/20 text-red-400 rounded-lg border border-red-900">
           {error}
         </div>
       )}
@@ -151,6 +161,7 @@ const DashboardPage: React.FC = () => {
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-lg sm:text-xl font-bold text-white">Tickets Recentes</h2>
           <button
+            type="button"
             onClick={() => navigate('/tickets')}
             className="text-sm text-brand-blue hover:text-brand-blue/80 transition-colors"
           >

@@ -32,31 +32,37 @@ const LoginPage: React.FC = () => {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm text-dark-muted mb-1">Email</label>
+            <label htmlFor="login-email" className="block text-sm text-dark-muted mb-1">Email</label>
             <input
+              id="login-email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="input"
               placeholder="seu@email.com"
+              aria-invalid={Boolean(error)}
+              aria-describedby={error ? 'login-error' : undefined}
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm text-dark-muted mb-1">Senha</label>
+            <label htmlFor="login-senha" className="block text-sm text-dark-muted mb-1">Senha</label>
             <input
+              id="login-senha"
               type="password"
               value={senha}
               onChange={(e) => setSenha(e.target.value)}
               className="input"
               placeholder="••••••••"
+              aria-invalid={Boolean(error)}
+              aria-describedby={error ? 'login-error' : undefined}
               required
             />
           </div>
 
           {error && (
-            <p className="text-brand-red text-sm">{error}</p>
+            <p id="login-error" role="alert" aria-live="assertive" className="text-brand-red text-sm">{error}</p>
           )}
 
           <button

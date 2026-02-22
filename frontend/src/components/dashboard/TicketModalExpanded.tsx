@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import { Ticket } from '@/api/tickets'
+import { getStatusColor, getStatusLabel } from '@/utils/ticketUtils'
+import { useBreakpoint } from '@/hooks/useBreakpoint'
 
 interface TicketModalExpandedProps {
   ticket?: Ticket | null
@@ -20,6 +22,8 @@ export const TicketModalExpanded: React.FC<TicketModalExpandedProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState<TabType>('details')
   const [editData, setEditData] = useState<Partial<Ticket> | null>(null)
+  const { isDesktop, isTablet } = useBreakpoint()
+  const titleId = React.useId()
 
   React.useEffect(() => {
     if (ticket) {
@@ -27,10 +31,19 @@ export const TicketModalExpanded: React.FC<TicketModalExpandedProps> = ({
     }
   }, [ticket])
 
-  if (!isOpen || !ticket || !editData) return null
+  React.useEffect(() => {
+    if (!isOpen) return
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onClose()
+      }
+    }
 
-  const isDesktop = window.innerWidth >= 1024
-  const isTablet = window.innerWidth >= 640
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [isOpen, onClose])
+
+  if (!isOpen || !ticket || !editData) return null
 
   const modalWidth = isDesktop ? '90vw' : isTablet ? '95vw' : 'full'
   const maxHeight = isDesktop ? 'max-h-[90vh]' : isTablet ? 'max-h-[95vh]' : 'h-screen'
@@ -46,41 +59,31 @@ export const TicketModalExpanded: React.FC<TicketModalExpandedProps> = ({
     })
   }
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'aberto':
-        return 'bg-red-900/20 text-red-400'
-      case 'em_andamento':
-        return 'bg-yellow-900/20 text-yellow-400'
-      case 'fechado':
-        return 'bg-green-900/20 text-green-400'
-      default:
-        return 'bg-gray-900/20 text-gray-400'
-    }
-  }
-
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+    <div
+      className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+      onClick={onClose}
+    >
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
         className={`bg-dark-card border border-dark-border rounded-lg ${maxHeight} w-full overflow-y-auto shadow-2xl`}
         style={{
           maxWidth: isDesktop ? '90vw' : '100%',
           width: modalWidth === 'full' ? '100%' : 'auto',
         }}
+        onClick={(event) => event.stopPropagation()}
       >
         {/* Header */}
         <div className="sticky top-0 bg-dark-border border-b border-dark-border p-4 sm:p-6 flex justify-between items-start">
           <div className="flex-1">
-            <h2 className="text-lg sm:text-2xl font-bold text-white mb-2">
+            <h2 id={titleId} className="text-lg sm:text-2xl font-bold text-white mb-2">
               {ticket.descricao}
             </h2>
             <div className="flex items-center gap-2 flex-wrap">
               <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(ticket.status)}`}>
-                {ticket.status === 'aberto'
-                  ? 'Aberto'
-                  : ticket.status === 'em_andamento'
-                    ? 'Em Andamento'
-                    : 'Fechado'}
+                {getStatusLabel(ticket.status)}
               </span>
               <span className="text-dark-muted text-xs">
                 ID: {ticket.id}
@@ -88,18 +91,23 @@ export const TicketModalExpanded: React.FC<TicketModalExpandedProps> = ({
             </div>
           </div>
           <button
+            type="button"
             onClick={onClose}
             className="text-dark-muted hover:text-white transition-colors text-2xl leading-none"
+            aria-label="Fechar modal"
           >
             ✕
           </button>
         </div>
 
         {/* Tabs */}
-        <div className="border-b border-dark-border flex overflow-x-auto bg-dark-card">
+        <div className="border-b border-dark-border flex overflow-x-auto bg-dark-card" role="tablist" aria-label="Seções do ticket">
           {(['details', 'history', 'notes'] as TabType[]).map((tab) => (
             <button
               key={tab}
+              type="button"
+              role="tab"
+              aria-selected={activeTab === tab}
               onClick={() => setActiveTab(tab)}
               className={`px-4 sm:px-6 py-3 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
                 activeTab === tab
@@ -120,10 +128,11 @@ export const TicketModalExpanded: React.FC<TicketModalExpandedProps> = ({
             <div className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs text-dark-muted mb-2 font-semibold">
+                  <label htmlFor="ticket-status" className="block text-xs text-dark-muted mb-2 font-semibold">
                     Status
                   </label>
                   <select
+                    id="ticket-status"
                     value={editData.status || ''}
                     onChange={(e) =>
                       setEditData({
@@ -140,10 +149,11 @@ export const TicketModalExpanded: React.FC<TicketModalExpandedProps> = ({
                 </div>
 
                 <div>
-                  <label className="block text-xs text-dark-muted mb-2 font-semibold">
+                  <label htmlFor="ticket-valor" className="block text-xs text-dark-muted mb-2 font-semibold">
                     Valor Faturado (R$)
                   </label>
                   <input
+                    id="ticket-valor"
                     type="number"
                     step="0.01"
                     value={editData.valorFaturado || ''}
@@ -159,10 +169,11 @@ export const TicketModalExpanded: React.FC<TicketModalExpandedProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs text-dark-muted mb-2 font-semibold">
+                <label htmlFor="ticket-descricao" className="block text-xs text-dark-muted mb-2 font-semibold">
                   Descrição
                 </label>
                 <textarea
+                  id="ticket-descricao"
                   value={editData.descricao || ''}
                   onChange={(e) =>
                     setEditData({ ...editData, descricao: e.target.value })
@@ -210,6 +221,7 @@ export const TicketModalExpanded: React.FC<TicketModalExpandedProps> = ({
         {/* Footer */}
         <div className="sticky bottom-0 border-t border-dark-border bg-dark-card p-4 sm:p-6 flex gap-3 justify-end">
           <button
+            type="button"
             onClick={onClose}
             className="px-4 py-2 text-sm font-medium text-dark-muted hover:text-white transition-colors"
           >
@@ -217,12 +229,12 @@ export const TicketModalExpanded: React.FC<TicketModalExpandedProps> = ({
           </button>
           {onSave && (
             <button
+              type="button"
               onClick={() => {
                 onSave(editData)
-                onClose()
               }}
               disabled={isLoading}
-              className="px-4 py-2 text-sm font-medium bg-brand-blue text-white rounded hover:bg-brand-blue/90 disabled:opacity-50 transition-colors"
+              className="px-4 py-2 text-sm font-medium bg-brand-blue text-dark-bg rounded hover:bg-brand-blue/90 disabled:opacity-50 transition-colors"
             >
               {isLoading ? 'Salvando...' : 'Salvar'}
             </button>

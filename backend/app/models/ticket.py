@@ -25,3 +25,4 @@ class Ticket(BaseModel):
     empresa = relationship("Empresa", back_populates="tickets")
     contato = relationship("Contato", back_populates="tickets")
     categoria = relationship("CategoriaServico", back_populates="tickets")
+    faturamento = relationship("Faturamento", back_populates="ticket", uselist=False)

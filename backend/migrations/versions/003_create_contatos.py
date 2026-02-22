@@ -36,14 +36,30 @@ def upgrade() -> None:
     op.create_index("idx_contatos_principal", "contatos", ["principal"])
     op.create_index("idx_contatos_ativo", "contatos", ["ativo"])
 
-    op.create_foreign_key(
-        "fk_empresas_contato_principal",
-        "empresas", "contatos",
-        ["contato_principal_id"], ["id"],
-        ondelete="SET NULL",
-    )
+    bind = op.get_bind()
+    if bind.dialect.name == "sqlite":
+        with op.batch_alter_table("empresas") as batch_op:
+            batch_op.create_foreign_key(
+                "fk_empresas_contato_principal",
+                "contatos",
+                ["contato_principal_id"],
+                ["id"],
+                ondelete="SET NULL",
+            )
+    else:
+        op.create_foreign_key(
+            "fk_empresas_contato_principal",
+            "empresas", "contatos",
+            ["contato_principal_id"], ["id"],
+            ondelete="SET NULL",
+        )
 
 
 def downgrade() -> None:
-    op.drop_constraint("fk_empresas_contato_principal", "empresas", type_="foreignkey")
+    bind = op.get_bind()
+    if bind.dialect.name == "sqlite":
+        with op.batch_alter_table("empresas") as batch_op:
+            batch_op.drop_constraint("fk_empresas_contato_principal", type_="foreignkey")
+    else:
+        op.drop_constraint("fk_empresas_contato_principal", "empresas", type_="foreignkey")
     op.drop_table("contatos")

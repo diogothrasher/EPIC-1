@@ -20,7 +20,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     const t = localStorage.getItem('token')
     if (t) {
-      api.get('/api/auth/me')
+      api.get('/auth/me')
         .then((r) => setUsuario(r.data))
         .catch(() => {
           localStorage.removeItem('token')
@@ -33,7 +33,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [])
 
   const login = useCallback(async (email: string, senha: string) => {
-    const res = await api.post('/api/auth/login', { email, senha })
+    const res = await api.post('/auth/login', { email, senha })
     const { access_token, usuario: u } = res.data
     localStorage.setItem('token', access_token)
     setToken(access_token)

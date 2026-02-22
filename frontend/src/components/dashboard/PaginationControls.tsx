@@ -39,8 +39,9 @@ export const PaginationControls: React.FC<PaginationControlsProps> = ({
       <div className="flex items-center gap-4">
         {onPageSizeChange && (
           <div className="flex items-center gap-2">
-            <label className="text-sm text-dark-muted">Items por página:</label>
+            <label htmlFor="page-size" className="text-sm text-dark-muted">Items por página:</label>
             <select
+              id="page-size"
               value={pageSize}
               onChange={(e) => onPageSizeChange(parseInt(e.target.value))}
               className="bg-dark-border text-white rounded px-2 py-1 text-sm border border-dark-border"
@@ -55,6 +56,7 @@ export const PaginationControls: React.FC<PaginationControlsProps> = ({
 
         <div className="flex items-center gap-2">
           <button
+            type="button"
             onClick={handlePrevious}
             disabled={currentPage === 1}
             className="px-3 py-2 text-sm bg-dark-border text-white rounded hover:bg-dark-border/80 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
@@ -68,6 +70,7 @@ export const PaginationControls: React.FC<PaginationControlsProps> = ({
           </div>
 
           <button
+            type="button"
             onClick={handleNext}
             disabled={currentPage === totalPages}
             className="px-3 py-2 text-sm bg-dark-border text-white rounded hover:bg-dark-border/80 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"

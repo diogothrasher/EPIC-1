@@ -16,3 +16,4 @@ class Empresa(BaseModel):
 
     contatos = relationship("Contato", back_populates="empresa", foreign_keys="Contato.empresa_id")
     tickets = relationship("Ticket", back_populates="empresa")
+    faturamentos = relationship("Faturamento", back_populates="empresa")

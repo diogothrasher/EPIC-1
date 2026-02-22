@@ -2,6 +2,7 @@ import React from 'react'
 import { Ticket } from '@/api/tickets'
 import TimeElapsed from './TimeElapsed'
 import ActionMenu, { ActionMenuItem } from './ActionMenu'
+import { getStatusColor, getStatusLabel } from '@/utils/ticketUtils'
 
 interface TicketRowProps {
   ticket: Ticket
@@ -20,31 +21,6 @@ export const TicketRow: React.FC<TicketRowProps> = ({
   onDelete,
   isCompact = false,
 }) => {
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'aberto':
-        return 'text-red-400 bg-red-900/20'
-      case 'em_andamento':
-        return 'text-yellow-400 bg-yellow-900/20'
-      case 'fechado':
-        return 'text-green-400 bg-green-900/20'
-      default:
-        return 'text-gray-400 bg-gray-900/20'
-    }
-  }
-
-  const getStatusLabel = (status: string) => {
-    switch (status) {
-      case 'aberto':
-        return 'Aberto'
-      case 'em_andamento':
-        return 'Em Andamento'
-      case 'fechado':
-        return 'Fechado'
-      default:
-        return status
-    }
-  }
 
   const actionItems: ActionMenuItem[] = []
   if (onView)

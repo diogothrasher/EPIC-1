@@ -19,29 +19,29 @@ export const TabsSelector: React.FC<TabsSelectorProps> = ({
   counts,
   isLoading = false,
 }) => {
-  const tabs: { id: TabType; label: string; icon: string }[] = [
-    { id: 'abertos', label: 'Abertos', icon: '🔴' },
-    { id: 'em_andamento', label: 'Em Andamento', icon: '🟡' },
-    { id: 'fechados', label: 'Fechados', icon: '🟢' },
+  const tabs: { id: TabType; label: string }[] = [
+    { id: 'abertos', label: 'Abertos' },
+    { id: 'em_andamento', label: 'Em Andamento' },
+    { id: 'fechados', label: 'Fechados' },
   ]
 
   return (
-    <div className="flex gap-2 mb-4 border-b border-dark-border overflow-x-auto">
+    <div className="flex gap-2 mb-4 overflow-x-auto bg-dark-card/80 border border-dark-border p-1 rounded-xl">
       {tabs.map((tab) => (
         <button
           key={tab.id}
+          type="button"
           onClick={() => onTabChange(tab.id)}
           disabled={isLoading}
-          className={`px-4 py-3 whitespace-nowrap text-sm font-medium transition-colors border-b-2 flex items-center gap-2 ${
+          className={`px-4 py-2.5 whitespace-nowrap text-sm font-medium transition-all rounded-lg flex items-center gap-2 ${
             activeTab === tab.id
-              ? 'text-brand-blue border-b-brand-blue'
-              : 'text-dark-muted border-b-transparent hover:text-white'
+              ? 'text-dark-text bg-dark-hover ring-1 ring-white/10'
+              : 'text-dark-muted hover:text-white hover:bg-dark-hover/60'
           } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
         >
-          <span>{tab.icon}</span>
           {tab.label}
           {counts && (
-            <span className="ml-1 text-xs bg-dark-border px-2 py-1 rounded-full">
+            <span className="ml-1 text-xs bg-dark-border px-2 py-0.5 rounded-full">
               {counts[tab.id]}
             </span>
           )}

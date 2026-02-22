@@ -34,7 +34,7 @@ def upgrade() -> None:
         conn.execute(
             sa.text(
                 "INSERT INTO categorias_servico (id, nome, icone, cor_tag, ordem, ativo, data_criacao, data_atualizacao) "
-                "VALUES (:id, :nome, :icone, :cor, :ordem, true, now(), now())"
+                "VALUES (:id, :nome, :icone, :cor, :ordem, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)"
             ),
             {"id": str(uuid4()), "nome": nome, "icone": icone, "cor": cor, "ordem": ordem},
         )
@@ -48,7 +48,7 @@ def upgrade() -> None:
     conn.execute(
         sa.text(
             "INSERT INTO usuarios (id, email, senha_hash, nome, role, ativo, data_criacao, data_atualizacao) "
-            "VALUES (:id, :email, :senha_hash, :nome, 'admin', true, now(), now())"
+            "VALUES (:id, :email, :senha_hash, :nome, 'admin', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)"
         ),
         {
             "id": str(uuid4()),

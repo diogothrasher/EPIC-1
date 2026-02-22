@@ -1,0 +1,19 @@
+status:
+  branch: master
+  modifiedFiles:
+    - .codex/agents/aios-master.md
+    - .codex/agents/analyst.md
+    - .codex/agents/architect.md
+    - .codex/agents/data-engineer.md
+    - .codex/agents/dev.md
+  modifiedFilesTotalCount: 63
+  recentCommits:
+    - 'fix: corrigir TypeScript errors nos arquivos de teste do EPIC-1'
+    - 'docs: EPIC-1 completion summary - all 10 stories done (66 points)'
+  currentEpic: null
+  currentStory: null
+  lastUpdate: '2026-02-22T01:30:57.369Z'
+  isGitRepo: true
+timestamp: 1771723857371
+ttl: 60
+gitFingerprint: null

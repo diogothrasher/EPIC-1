@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 
 export interface FilterValues {
   empresa?: string
@@ -22,19 +22,17 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   debounceMs = 300,
 }) => {
   const [filters, setFilters] = useState<FilterValues>({})
-  const [debounceTimer, setDebounceTimer] = useState<ReturnType<typeof setTimeout> | null>(null)
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
-    if (debounceTimer) clearTimeout(debounceTimer)
+    if (debounceRef.current) clearTimeout(debounceRef.current)
 
-    const timer = setTimeout(() => {
+    debounceRef.current = setTimeout(() => {
       onFilterChange(filters)
     }, debounceMs)
 
-    setDebounceTimer(timer)
-
     return () => {
-      if (timer) clearTimeout(timer)
+      if (debounceRef.current) clearTimeout(debounceRef.current)
     }
   }, [filters, onFilterChange, debounceMs])
 
@@ -56,10 +54,11 @@ export const FilterBar: React.FC<FilterBarProps> = ({
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         {/* Empresa Filter */}
         <div>
-          <label className="block text-xs text-dark-muted mb-2 font-semibold">
+          <label htmlFor="filter-empresa" className="block text-xs text-dark-muted mb-2 font-semibold">
             Empresa
           </label>
           <select
+            id="filter-empresa"
             value={filters.empresa || ''}
             onChange={(e) => handleChange('empresa', e.target.value)}
             className="w-full bg-dark-border text-white rounded px-3 py-2 text-sm border border-dark-border focus:border-brand-blue outline-none transition-colors"
@@ -75,10 +74,11 @@ export const FilterBar: React.FC<FilterBarProps> = ({
 
         {/* Description Filter */}
         <div>
-          <label className="block text-xs text-dark-muted mb-2 font-semibold">
+          <label htmlFor="filter-descricao" className="block text-xs text-dark-muted mb-2 font-semibold">
             Descrição
           </label>
           <input
+            id="filter-descricao"
             type="text"
             value={filters.descricao || ''}
             onChange={(e) => handleChange('descricao', e.target.value)}
@@ -89,10 +89,11 @@ export const FilterBar: React.FC<FilterBarProps> = ({
 
         {/* Category Filter */}
         <div>
-          <label className="block text-xs text-dark-muted mb-2 font-semibold">
+          <label htmlFor="filter-categoria" className="block text-xs text-dark-muted mb-2 font-semibold">
             Categoria
           </label>
           <select
+            id="filter-categoria"
             value={filters.categoria || ''}
             onChange={(e) => handleChange('categoria', e.target.value)}
             className="w-full bg-dark-border text-white rounded px-3 py-2 text-sm border border-dark-border focus:border-brand-blue outline-none transition-colors"
@@ -108,10 +109,11 @@ export const FilterBar: React.FC<FilterBarProps> = ({
 
         {/* Date Range */}
         <div>
-          <label className="block text-xs text-dark-muted mb-2 font-semibold">
+          <label htmlFor="filter-data-inicio" className="block text-xs text-dark-muted mb-2 font-semibold">
             Data Início
           </label>
           <input
+            id="filter-data-inicio"
             type="date"
             value={filters.dataInicio || ''}
             onChange={(e) => handleChange('dataInicio', e.target.value)}
@@ -120,10 +122,11 @@ export const FilterBar: React.FC<FilterBarProps> = ({
         </div>
 
         <div>
-          <label className="block text-xs text-dark-muted mb-2 font-semibold">
+          <label htmlFor="filter-data-fim" className="block text-xs text-dark-muted mb-2 font-semibold">
             Data Fim
           </label>
           <input
+            id="filter-data-fim"
             type="date"
             value={filters.dataFim || ''}
             onChange={(e) => handleChange('dataFim', e.target.value)}
@@ -135,6 +138,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
       {hasActiveFilters && (
         <div className="mt-3 flex justify-end">
           <button
+            type="button"
             onClick={handleClearFilters}
             className="text-sm text-brand-blue hover:text-brand-blue/80 transition-colors"
           >

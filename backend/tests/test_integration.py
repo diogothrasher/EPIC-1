@@ -423,6 +423,27 @@ class TestTicketsFlow:
         assert response.status_code == 200
         assert response.json()["status"] == "fechado"
 
+    def test_delete_ticket_soft_delete(self, setup_complete):
+        """Test: Delete ticket (soft) → 204 and no longer listed"""
+        client, empresa_id, categoria_id, user_id, contato_id = setup_complete
+
+        response = client.post("/api/tickets", json={
+            "titulo": "Ticket to delete",
+            "descricao": "This ticket should be soft deleted and hidden from list",
+            "empresa_id": str(empresa_id),
+            "categoria_id": str(categoria_id),
+            "contato_id": str(contato_id)
+        })
+        assert response.status_code == 201
+        ticket_id = response.json()["id"]
+
+        response = client.delete(f"/api/tickets/{ticket_id}")
+        assert response.status_code == 204
+
+        response = client.get("/api/tickets")
+        assert response.status_code == 200
+        assert all(t["id"] != ticket_id for t in response.json())
+
     def test_delete_empresa_soft_delete_ticket_still_accessible(self, setup_complete):
         """Test: Delete empresa (soft) → ticket still accessible"""
         client, empresa_id, categoria_id, user_id, contato_id = setup_complete

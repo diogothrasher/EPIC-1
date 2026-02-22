@@ -26,9 +26,9 @@ const Toast: React.FC = () => {
         icon: AlertTriangle,
       },
       info: {
-        bg: 'bg-blue-900/20',
-        border: 'border-blue-900',
-        text: 'text-blue-400',
+        bg: 'bg-dark-hover/70',
+        border: 'border-dark-border',
+        text: 'text-dark-text',
         icon: Info,
       },
     }
@@ -36,7 +36,7 @@ const Toast: React.FC = () => {
   }
 
   return (
-    <div className="fixed top-4 right-4 z-50 space-y-2 max-w-md">
+    <div className="fixed top-4 right-4 z-50 space-y-2 max-w-md" aria-live="polite" aria-atomic="false">
       {toasts.map((toast) => {
         const style = getStylesByType(toast.type)
         const IconComponent = style.icon
@@ -44,6 +44,8 @@ const Toast: React.FC = () => {
         return (
           <div
             key={toast.id}
+            role={toast.type === 'error' || toast.type === 'warning' ? 'alert' : 'status'}
+            aria-live={toast.type === 'error' || toast.type === 'warning' ? 'assertive' : 'polite'}
             className={`flex items-start gap-3 p-4 rounded-lg border ${style.bg} ${style.border} animate-fade-in`}
           >
             <IconComponent className={`w-5 h-5 mt-0.5 flex-shrink-0 ${style.text}`} />

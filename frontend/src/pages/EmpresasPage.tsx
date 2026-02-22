@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { empresasApi, Empresa } from '@/api/empresas'
 import { useToast } from '@/context/ToastContext'
-import { Plus, Trash2 } from 'lucide-react'
+import { useConfirm } from '@/context/ConfirmContext'
+import { Pencil, Plus, Trash2 } from 'lucide-react'
 
 interface FormData {
   nome: string
@@ -16,6 +17,7 @@ const EmpresasPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [editingEmpresaId, setEditingEmpresaId] = useState<string | null>(null)
   const [formData, setFormData] = useState<FormData>({
     nome: '',
     cnpj: '',
@@ -25,6 +27,14 @@ const EmpresasPage: React.FC = () => {
   })
   const [errors, setErrors] = useState<Record<string, string>>({})
   const { addToast } = useToast()
+  const { showConfirm } = useConfirm()
+
+  const resetForm = () => {
+    setFormData({ nome: '', cnpj: '', email: '', telefone: '', endereco: '' })
+    setErrors({})
+    setEditingEmpresaId(null)
+    setShowForm(false)
+  }
 
   useEffect(() => {
     loadEmpresas()
@@ -74,21 +84,50 @@ const EmpresasPage: React.FC = () => {
 
     try {
       setIsSubmitting(true)
-      const newEmpresa = await empresasApi.create(formData)
-      setEmpresas([...empresas, newEmpresa as Empresa])
-      setFormData({ nome: '', cnpj: '', email: '', telefone: '', endereco: '' })
-      setShowForm(false)
-      addToast('Empresa criada com sucesso!', 'success')
+      if (editingEmpresaId) {
+        const updatedEmpresa = await empresasApi.update(editingEmpresaId, formData)
+        setEmpresas((prev) => prev.map((empresa) => (empresa.id === editingEmpresaId ? updatedEmpresa : empresa)))
+        addToast('Empresa atualizada com sucesso!', 'success')
+      } else {
+        const newEmpresa = await empresasApi.create(formData)
+        setEmpresas((prev) => [...prev, newEmpresa as Empresa])
+        addToast('Empresa criada com sucesso!', 'success')
+      }
+      resetForm()
     } catch (err: any) {
-      const errorMsg = err.response?.data?.detail || err.message || 'Erro ao criar empresa'
+      const errorMsg =
+        err.response?.data?.detail
+        || err.message
+        || (editingEmpresaId ? 'Erro ao atualizar empresa' : 'Erro ao criar empresa')
       addToast(errorMsg, 'error')
     } finally {
       setIsSubmitting(false)
     }
   }
 
+  const handleEdit = (empresa: Empresa) => {
+    setEditingEmpresaId(empresa.id)
+    setFormData({
+      nome: empresa.nome || '',
+      cnpj: empresa.cnpj || '',
+      email: empresa.email || '',
+      telefone: empresa.telefone || '',
+      endereco: empresa.endereco || '',
+    })
+    setErrors({})
+    setShowForm(true)
+  }
+
   const handleDelete = async (id: string) => {
-    if (!window.confirm('Tem certeza que deseja deletar esta empresa?')) return
+    const confirmed = await showConfirm({
+      title: 'Deletar Empresa',
+      message: 'Tem certeza que deseja deletar esta empresa? Esta ação não pode ser desfeita.',
+      confirmText: 'Deletar',
+      cancelText: 'Cancelar',
+      isDangerous: true,
+    })
+
+    if (!confirmed) return
 
     try {
       await empresasApi.delete(id)
@@ -104,7 +143,7 @@ const EmpresasPage: React.FC = () => {
     return (
       <div className="p-6">
         <h1 className="text-2xl font-bold text-white mb-6">Empresas</h1>
-        <div className="flex items-center justify-center min-h-64">
+        <div className="flex items-center justify-center min-h-64" role="status" aria-live="polite" aria-label="Carregando empresas">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-blue" />
         </div>
       </div>
@@ -116,71 +155,94 @@ const EmpresasPage: React.FC = () => {
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-white">Empresas</h1>
         <button
-          onClick={() => setShowForm(!showForm)}
+          type="button"
+          onClick={() => {
+            if (showForm) {
+              resetForm()
+              return
+            }
+            setShowForm(true)
+          }}
           className="flex items-center gap-2 btn-primary"
+          aria-expanded={showForm}
+          aria-controls="empresa-create-form"
         >
           <Plus className="w-4 h-4" />
-          Nova Empresa
+          {showForm ? 'Fechar' : 'Nova Empresa'}
         </button>
       </div>
 
       {showForm && (
-        <div className="card mb-6">
-          <h2 className="text-lg font-semibold text-white mb-4">Criar Nova Empresa</h2>
+        <div id="empresa-create-form" className="card mb-6">
+          <h2 className="text-lg font-semibold text-white mb-4">
+            {editingEmpresaId ? 'Editar Empresa' : 'Criar Nova Empresa'}
+          </h2>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-dark-muted mb-2">
+              <label htmlFor="empresa-nome" className="block text-sm font-medium text-dark-muted mb-2">
                 Nome *
               </label>
               <input
+                id="empresa-nome"
                 type="text"
                 className="input"
                 placeholder="Nome da empresa"
                 value={formData.nome}
                 onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
+                required
+                aria-required="true"
+                aria-invalid={Boolean(errors.nome)}
+                aria-describedby={errors.nome ? 'empresa-nome-error' : undefined}
               />
               {errors.nome && (
-                <p className="text-red-400 text-sm mt-1">{errors.nome}</p>
+                <p id="empresa-nome-error" role="alert" className="text-red-400 text-sm mt-1">{errors.nome}</p>
               )}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-dark-muted mb-2">
+              <label htmlFor="empresa-cnpj" className="block text-sm font-medium text-dark-muted mb-2">
                 CNPJ
               </label>
               <input
+                id="empresa-cnpj"
                 type="text"
                 className="input"
                 placeholder="XX.XXX.XXX/XXXX-XX"
                 value={formData.cnpj}
                 onChange={(e) => setFormData({ ...formData, cnpj: e.target.value })}
+                aria-invalid={Boolean(errors.cnpj)}
+                aria-describedby={errors.cnpj ? 'empresa-cnpj-error' : undefined}
               />
               {errors.cnpj && (
-                <p className="text-red-400 text-sm mt-1">{errors.cnpj}</p>
+                <p id="empresa-cnpj-error" role="alert" className="text-red-400 text-sm mt-1">{errors.cnpj}</p>
               )}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-dark-muted mb-2">
+              <label htmlFor="empresa-email" className="block text-sm font-medium text-dark-muted mb-2">
                 Email
               </label>
               <input
+                id="empresa-email"
                 type="email"
                 className="input"
                 placeholder="email@empresa.com"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                aria-invalid={Boolean(errors.email)}
+                aria-describedby={errors.email ? 'empresa-email-error' : undefined}
               />
               {errors.email && (
-                <p className="text-red-400 text-sm mt-1">{errors.email}</p>
+                <p id="empresa-email-error" role="alert" className="text-red-400 text-sm mt-1">{errors.email}</p>
               )}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-dark-muted mb-2">
+              <label htmlFor="empresa-telefone" className="block text-sm font-medium text-dark-muted mb-2">
                 Telefone
               </label>
               <input
+                id="empresa-telefone"
                 type="tel"
                 className="input"
                 placeholder="(11) 99999-9999"
@@ -190,10 +252,11 @@ const EmpresasPage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-dark-muted mb-2">
+              <label htmlFor="empresa-endereco" className="block text-sm font-medium text-dark-muted mb-2">
                 Endereço
               </label>
               <input
+                id="empresa-endereco"
                 type="text"
                 className="input"
                 placeholder="Rua, número, complemento"
@@ -208,15 +271,11 @@ const EmpresasPage: React.FC = () => {
                 disabled={isSubmitting}
                 className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isSubmitting ? 'Criando...' : 'Criar Empresa'}
+                {isSubmitting ? (editingEmpresaId ? 'Salvando...' : 'Criando...') : (editingEmpresaId ? 'Salvar Alterações' : 'Criar Empresa')}
               </button>
               <button
                 type="button"
-                onClick={() => {
-                  setShowForm(false)
-                  setFormData({ nome: '', cnpj: '', email: '', telefone: '', endereco: '' })
-                  setErrors({})
-                }}
+                onClick={resetForm}
                 className="px-4 py-2 text-dark-muted hover:text-white transition"
               >
                 Cancelar
@@ -226,23 +285,24 @@ const EmpresasPage: React.FC = () => {
         </div>
       )}
 
-      <div className="rounded-lg border border-dark-border overflow-hidden">
+      <div className="rounded-lg border border-dark-border">
         <table className="w-full">
+          <caption className="sr-only">Tabela de empresas cadastradas</caption>
           <thead>
             <tr className="bg-dark-border">
-              <th className="px-4 py-3 text-left text-xs font-semibold text-dark-muted uppercase">
+              <th scope="col" className="px-4 py-3 text-left text-xs font-semibold text-dark-muted uppercase">
                 Nome
               </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-dark-muted uppercase">
+              <th scope="col" className="px-4 py-3 text-left text-xs font-semibold text-dark-muted uppercase">
                 CNPJ
               </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-dark-muted uppercase">
+              <th scope="col" className="px-4 py-3 text-left text-xs font-semibold text-dark-muted uppercase">
                 Email
               </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-dark-muted uppercase">
+              <th scope="col" className="px-4 py-3 text-left text-xs font-semibold text-dark-muted uppercase">
                 Telefone
               </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-dark-muted uppercase">
+              <th scope="col" className="px-4 py-3 text-left text-xs font-semibold text-dark-muted uppercase">
                 Ações
               </th>
             </tr>
@@ -262,12 +322,24 @@ const EmpresasPage: React.FC = () => {
                   {empresa.telefone || '—'}
                 </td>
                 <td className="px-4 py-3">
-                  <button
-                    onClick={() => handleDelete(empresa.id)}
-                    className="text-red-400 hover:text-red-300 transition"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      aria-label={`Editar empresa ${empresa.nome}`}
+                      onClick={() => handleEdit(empresa)}
+                      className="text-brand-blue hover:text-brand-blue/80 transition"
+                    >
+                      <Pencil className="w-4 h-4" />
+                    </button>
+                    <button
+                      type="button"
+                      aria-label={`Excluir empresa ${empresa.nome}`}
+                      onClick={() => handleDelete(empresa.id)}
+                      className="text-red-400 hover:text-red-300 transition"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}

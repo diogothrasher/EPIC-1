@@ -61,23 +61,24 @@ export const TicketTableInline: React.FC<TicketTableInlineProps> = ({
   }
 
   return (
-    <div className="rounded-lg border border-dark-border overflow-hidden">
+    <div className="rounded-lg border border-dark-border">
       <table className="w-full">
+        <caption className="sr-only">Tabela de tickets com status e ações disponíveis</caption>
         <thead>
           <tr className="bg-dark-border">
-            <th className="px-4 py-3 text-left text-xs font-semibold text-dark-muted uppercase">
+            <th scope="col" className="px-4 py-3 text-left text-xs font-semibold text-dark-muted uppercase">
               Descrição
             </th>
-            <th className="px-4 py-3 text-left text-xs font-semibold text-dark-muted uppercase">
+            <th scope="col" className="px-4 py-3 text-left text-xs font-semibold text-dark-muted uppercase">
               Empresa
             </th>
-            <th className="px-4 py-3 text-left text-xs font-semibold text-dark-muted uppercase">
+            <th scope="col" className="px-4 py-3 text-left text-xs font-semibold text-dark-muted uppercase">
               Status
             </th>
-            <th className="px-4 py-3 text-left text-xs font-semibold text-dark-muted uppercase">
+            <th scope="col" className="px-4 py-3 text-left text-xs font-semibold text-dark-muted uppercase">
               Tempo
             </th>
-            <th className="px-4 py-3 text-right text-xs font-semibold text-dark-muted uppercase">
+            <th scope="col" className="px-4 py-3 text-right text-xs font-semibold text-dark-muted uppercase">
               Ações
             </th>
           </tr>

@@ -32,7 +32,7 @@ const TicketDetailPage: React.FC = () => {
     return (
       <div className="p-6">
         <h1 className="text-2xl font-bold text-white mb-6">Detalhes do Ticket</h1>
-        <div className="flex items-center justify-center min-h-64">
+        <div className="flex items-center justify-center min-h-64" role="status" aria-live="polite" aria-label="Carregando detalhes do ticket">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-blue" />
         </div>
       </div>
@@ -44,11 +44,12 @@ const TicketDetailPage: React.FC = () => {
       <div className="p-6">
         <h1 className="text-2xl font-bold text-white mb-6">Detalhes do Ticket</h1>
         {error && (
-          <div className="mb-4 p-4 bg-red-900/20 text-red-400 rounded-lg border border-red-900">
+          <div role="alert" aria-live="assertive" className="mb-4 p-4 bg-red-900/20 text-red-400 rounded-lg border border-red-900">
             {error}
           </div>
         )}
         <button
+          type="button"
           onClick={() => navigate('/tickets')}
           className="text-brand-blue hover:text-brand-blue/80 transition-colors"
         >
@@ -61,6 +62,7 @@ const TicketDetailPage: React.FC = () => {
   return (
     <div className="p-6">
       <button
+        type="button"
         onClick={() => navigate('/tickets')}
         className="text-brand-blue hover:text-brand-blue/80 transition-colors mb-4"
       >

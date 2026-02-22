@@ -27,7 +27,7 @@ services:
       DATABASE_URL: postgresql+psycopg://saturno:password@postgres:5432/gestao_db
       SECRET_KEY: dev-secret-key-mude-em-producao-123456789
       ENVIRONMENT: development
-      ADMIN_EMAIL: admin@gestao.local
+      ADMIN_EMAIL: admin@gestao.com
       ADMIN_PASSWORD: admin123456
     ports:
       - "8000:8000"
