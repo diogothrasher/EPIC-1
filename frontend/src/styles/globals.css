@@ -8,7 +8,33 @@
   }
 
   body {
-    @apply bg-dark-bg text-dark-text;
+    @apply text-dark-text;
+    background-color: #090a0c;
+    background-image:
+      radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.06) 0%, transparent 45%),
+      radial-gradient(circle at 82% 20%, rgba(164, 175, 188, 0.08) 0%, transparent 40%),
+      linear-gradient(160deg, #08090b 0%, #10131a 45%, #0b0d11 100%);
+    color-scheme: dark;
+    font-family: "Manrope", "IBM Plex Sans", "Segoe UI", sans-serif;
+    min-height: 100vh;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: rgba(0, 255, 65, 0.2);
+    color: #f3f5f7;
+  }
+
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  [role='menuitem']:focus-visible {
+    outline: 2px solid #00FF41;
+    outline-offset: 2px;
   }
 
   ::-webkit-scrollbar {
@@ -20,25 +46,50 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-dark-border rounded;
+    background: rgba(0, 255, 65, 0.25);
+    @apply rounded;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply bg-brand-blue hover:bg-blue-600 text-white font-medium px-4 py-2 rounded-lg transition-colors;
+    @apply text-sm font-semibold px-4 py-2 rounded-lg transition-all;
+    background: linear-gradient(135deg, #00FF41 0%, #00C032 100%);
+    box-shadow: 0 10px 30px rgba(0, 255, 65, 0.2);
+    color: #080a0c;
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    transform: translateY(-1px);
+    filter: brightness(1.03);
+    box-shadow: 0 16px 36px rgba(6, 8, 12, 0.55);
   }
 
   .btn-danger {
-    @apply bg-brand-red hover:bg-red-600 text-white font-medium px-4 py-2 rounded-lg transition-colors;
+    @apply text-sm font-semibold px-4 py-2 rounded-lg transition-all;
+    background: linear-gradient(135deg, #d17c7c 0%, #9f4d4d 100%);
+    color: #fff;
+  }
+
+  .btn-danger:hover:not(:disabled) {
+    filter: brightness(1.06);
   }
 
   .card {
-    @apply bg-dark-card border border-dark-border rounded-xl p-4;
+    @apply border border-dark-border rounded-xl p-4;
+    background: linear-gradient(180deg, rgba(17, 19, 23, 0.96) 0%, rgba(11, 13, 17, 0.98) 100%);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(8px);
   }
 
   .input {
-    @apply bg-dark-card border border-dark-border rounded-lg px-3 py-2 text-dark-text placeholder-dark-muted focus:outline-none focus:border-brand-blue w-full;
+    @apply border border-dark-border rounded-lg px-3 py-2 text-dark-text placeholder-dark-muted focus:outline-none w-full transition-all;
+    background: #0d1015;
+  }
+
+  .input:focus {
+    border-color: #00FF41;
+    box-shadow: 0 0 0 3px rgba(0, 255, 65, 0.12);
   }
 
   .badge-aberto {
@@ -72,5 +123,23 @@
 
   .animate-fade-in {
     animation: fadeIn 0.3s ease-out;
+  }
+
+  .skip-link {
+    position: absolute;
+    left: 1rem;
+    top: -40px;
+    z-index: 80;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    background: #00FF41;
+    color: #080a0c;
+    font-size: 0.875rem;
+    font-weight: 700;
+    transition: top 0.15s ease;
+  }
+
+  .skip-link:focus {
+    top: 0.75rem;
   }
 }
